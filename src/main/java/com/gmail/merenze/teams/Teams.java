@@ -7,6 +7,7 @@ import com.gmail.merenze.teams.commands.TeamCommand;
 public class Teams extends JavaPlugin {
 	@Override
 	public void onEnable() {
-		this.getServer().getPluginManager().setExecutor(new TeamCommand(this));
+		this.getCommand("team").setExecutor(new TeamCommand(this));
 	}
+	
 }
