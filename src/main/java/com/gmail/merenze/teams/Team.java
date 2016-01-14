@@ -26,11 +26,15 @@ public class Team {
 	public Team(Player creator, String name, Teams plugin) {
 		this.plugin = plugin;
 		this.name = name;
+		String uuid = creator.getUniqueId().toString();
+		//Update team data
 		List<String> leaders = new ArrayList();
-		leaders.add(creator.getUniqueId().toString());
-		
+		leaders.add(uuid);
 		this.plugin.getConfig().set("teams." + name + ".leaders", leaders); //Adds creator to team leaders
 		this.plugin.getConfig().set("teams.settings.ff", "false"); //Sets friendlyfire to default false		
+		//Update player data
+		this.plugin.getConfig().set("players." + uuid + ".team", this.name);
+		this.plugin.getConfig().set("players." + uuid + ".ff", "false");
 	}
 	//Used in the static method Team.getTeam(Player, Teams). Should not be used under any other circumstances.
 	public Team(Player player, Teams plugin) {
