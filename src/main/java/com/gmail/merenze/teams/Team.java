@@ -37,13 +37,21 @@ public class Team {
 		this.plugin.getConfig().set("players." + uuid + ".team", this.name);
 		this.plugin.getConfig().set("players." + uuid + ".chat", "false");
 		this.plugin.saveConfig();
+		//Add team name to list
+		List<String> names = this.plugin.getConfig().getStringList("names");
+		names.add(name);
+		this.plugin.getConfig().set("names", names);
 	}
 	//Used in the static method Team.getTeam(Player, Teams). Should not be used under any other circumstances.
 	public Team(Player player, Teams plugin) {
 		String path = "players." + player.getUniqueId().toString() + ".team";
 		this.plugin = plugin;
 		this.name = plugin.getConfig().getString(path);
-		plugin.saveConfig();
+	}
+	//Used in the static method Team.getTeam(String, Teams). Should not be used under any other circumstances.
+	public Team(String name, Teams plugin) {
+		this.name=name;
+		this.plugin=plugin;
 	}
 	/* - - - - -
 	 * Mutators
@@ -139,13 +147,13 @@ public class Team {
 		plugin.getConfig().set(path + ".z", Double.toString(location.getZ()));
 		plugin.saveConfig();
 	}
-	//Changes whether or not teammates can hurt eachother
+	//Changes whether or not teammates can hurt each other
 	public void toggleFF() {
 		String path = "teams." + name + "settings.ff";
-		if(this.getFF()) { //If friendlyfire is on
-			plugin.getConfig().set(path, "false"); //Turn friendlyfire off
-		} else { //If friendlyfire is off
-			plugin.getConfig().set(path, "true"); //Turn friendlyfire on
+		if(this.getFF()) { //If friendly fire is on
+			plugin.getConfig().set(path, "false"); //Turn friendly fire off
+		} else { //If friendly fire is off
+			plugin.getConfig().set(path, "true"); //Turn friendly fire on
 		}
 		plugin.saveConfig();
 	}
@@ -190,7 +198,7 @@ public class Team {
 		double z = plugin.getConfig().getDouble(path + ".z");
 		return new Location(world, x, y, z);
 	}
-	//Returns friendlyfire setting
+	//Returns friendly fire setting
 	public boolean getFF() {
 		return plugin.getConfig().getBoolean("teams." + name + ".ff");
 	}
@@ -211,8 +219,18 @@ public class Team {
 	public static boolean hasTeam(Player player, Teams plugin) {
 		return getTeam(player, plugin).getName() != null;
 	}
+	public static boolean exists(String name, Teams plugin) {
+		List<String> names = plugin.getConfig().getStringList("names");
+		return names.contains(name);
+	}
 	//Returns a reference to a team
 	public static Team getTeam(Player player, Teams plugin) {
 		return new Team(player, plugin);
+	}
+	//Tests if team name exists
+	public static Team getTeam (String name, Teams plugin) {
+		if (exists(name, plugin)) {
+			return new Team(name, plugin);
+		} else return null;
 	}
 }

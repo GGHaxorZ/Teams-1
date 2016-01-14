@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.merenze.teams.Teams;
+import com.gmail.merenze.teams.commands.Create;
 
 public class TeamCommand implements CommandExecutor {	
 	private Teams plugin;
@@ -24,7 +25,7 @@ public class TeamCommand implements CommandExecutor {
 				if (arg.equalsIgnoreCase("create")) {
 					Create.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("join")) {
-					
+					Join.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("hq")) {
 					
 				} else if (arg.equalsIgnoreCase("rally")) {
