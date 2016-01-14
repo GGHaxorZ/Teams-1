@@ -1,11 +1,12 @@
 package com.gmail.merenze.teams;
 /* I M P O R T A N T *
  * * * * * * * * * * *
- * There is no reason to instantiate a team object, except when a player creates a team.
- * Instead access team settings and methods with Team.getTeam(Player, Teams)
- * which will return an object whose methods can be accessed.
+ * There is no reason to instantiate a team object, except when a player creates a
+ * team. In all other circumstances, team methods should be accessed with the static
+ * method getTeam(), which will return an object whose methods can be accessed.
  * Example:
  * Team.getTeam((Player) sender, plugin).addMember((Player) sender);
+ * Adds the command executor to the team.
  * * * * * * * * * * *
  */
 import java.util.ArrayList;
@@ -31,16 +32,18 @@ public class Team {
 		List<String> leaders = new ArrayList();
 		leaders.add(uuid);
 		this.plugin.getConfig().set("teams." + name + ".leaders", leaders); //Adds creator to team leaders
-		this.plugin.getConfig().set("teams.settings.ff", "false"); //Sets friendlyfire to default false		
+		this.plugin.getConfig().set("teams." + name + ".ff", "false"); //Sets friendlyfire to default false		
 		//Update player data
 		this.plugin.getConfig().set("players." + uuid + ".team", this.name);
 		this.plugin.getConfig().set("players." + uuid + ".chat", "false");
+		this.plugin.saveConfig();
 	}
 	//Used in the static method Team.getTeam(Player, Teams). Should not be used under any other circumstances.
 	public Team(Player player, Teams plugin) {
 		String path = "players." + player.getUniqueId().toString() + ".team";
 		this.plugin = plugin;
 		this.name = plugin.getConfig().getString(path);
+		plugin.saveConfig();
 	}
 	/* - - - - -
 	 * Mutators
@@ -49,6 +52,7 @@ public class Team {
 	//Sets team pass
 	public void setPass(String pass) {
 		plugin.getConfig().set("teams." + name + ".pass", pass);
+		plugin.saveConfig();
 	}
 	//Adds a member to a team
 	public void addMember(Player target) {
@@ -63,6 +67,7 @@ public class Team {
 		path = "players." + uuid;
 		plugin.getConfig().set(path + "team", name);
 		plugin.getConfig().set(path + "chat", "false"); //Sets team chat to default false
+		plugin.saveConfig();
 	}
 	//Removes a member from the team
 	public void removeMember(Player target) {
@@ -77,6 +82,7 @@ public class Team {
 				}
 			}
 		}
+		plugin.saveConfig();
 	}
 	//Promotes a member to leader
 	public void promote(Player target) {
@@ -95,6 +101,7 @@ public class Team {
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
 			
 		}
+		plugin.saveConfig();
 	}
 	//Demotes a leader
 	public void demote(Player target) {
@@ -112,6 +119,7 @@ public class Team {
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
 			plugin.getConfig().set("teams." + name + ".leaders", leaders); //Update leaders
 		}
+		plugin.saveConfig();
 	}
 	//Sets team hq
 	public void setHq(Location location) {
@@ -120,6 +128,7 @@ public class Team {
 		plugin.getConfig().set(path + ".x", Double.toString(location.getX()));
 		plugin.getConfig().set(path + ".y", Double.toString(location.getY()));
 		plugin.getConfig().set(path + ".z", Double.toString(location.getZ()));
+		plugin.saveConfig();
 	}
 	//Sets team rally point
 	public void setRally(Location location) {
@@ -128,6 +137,7 @@ public class Team {
 		plugin.getConfig().set(path + ".x", Double.toString(location.getX()));
 		plugin.getConfig().set(path + ".y", Double.toString(location.getY()));
 		plugin.getConfig().set(path + ".z", Double.toString(location.getZ()));
+		plugin.saveConfig();
 	}
 	//Changes whether or not teammates can hurt eachother
 	public void toggleFF() {
@@ -137,6 +147,7 @@ public class Team {
 		} else { //If friendlyfire is off
 			plugin.getConfig().set(path, "true"); //Turn friendlyfire on
 		}
+		plugin.saveConfig();
 	}
 	/* - - - - - -
 	 * Accessors
