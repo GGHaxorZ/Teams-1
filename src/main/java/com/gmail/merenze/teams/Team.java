@@ -34,7 +34,7 @@ public class Team {
 		this.plugin.getConfig().set("teams.settings.ff", "false"); //Sets friendlyfire to default false		
 		//Update player data
 		this.plugin.getConfig().set("players." + uuid + ".team", this.name);
-		this.plugin.getConfig().set("players." + uuid + ".ff", "false");
+		this.plugin.getConfig().set("players." + uuid + ".chat", "false");
 	}
 	//Used in the static method Team.getTeam(Player, Teams). Should not be used under any other circumstances.
 	public Team(Player player, Teams plugin) {
@@ -62,7 +62,7 @@ public class Team {
 		//Updates player data
 		path = "players." + uuid;
 		plugin.getConfig().set(path + "team", name);
-		plugin.getConfig().set(path + "teamchat", "false"); //Sets team chat to default false
+		plugin.getConfig().set(path + "chat", "false"); //Sets team chat to default false
 	}
 	//Removes a member from the team
 	public void removeMember(Player target) {

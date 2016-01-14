@@ -1,0 +1,7 @@
+name: Teams
+main: com.gmail.merenze.teams.Teams
+version: 1
+commands:
+  team:
+    description: Displays team interface
+    aliases: t
