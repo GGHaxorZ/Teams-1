@@ -35,7 +35,7 @@ public class Team {
 		this.plugin.getConfig().set("teams." + name + ".ff", "false"); //Sets friendlyfire to default false		
 		//Update player data
 		this.plugin.getConfig().set("players." + uuid + ".team", this.name);
-		this.plugin.getConfig().set("players." + uuid + ".chat", "false");
+		this.plugin.getConfig().set("players." + uuid + ".chat", false);
 		this.plugin.saveConfig();
 		//Add team name to list
 		List<String> names = this.plugin.getConfig().getStringList("names");
@@ -133,9 +133,9 @@ public class Team {
 	public void setHq(Location location) {
 		String path = "team." + name + ".hq";
 		plugin.getConfig().set(path + ".world", location.getWorld().toString());
-		plugin.getConfig().set(path + ".x", Double.toString(location.getX()));
-		plugin.getConfig().set(path + ".y", Double.toString(location.getY()));
-		plugin.getConfig().set(path + ".z", Double.toString(location.getZ()));
+		plugin.getConfig().set(path + ".x", location.getX());
+		plugin.getConfig().set(path + ".y", location.getY());
+		plugin.getConfig().set(path + ".z", location.getZ());
 		plugin.saveConfig();
 	}
 	//Sets team rally point
@@ -151,11 +151,20 @@ public class Team {
 	public void toggleFF() {
 		String path = "teams." + name + "settings.ff";
 		if(this.getFF()) { //If friendly fire is on
-			plugin.getConfig().set(path, "false"); //Turn friendly fire off
+			plugin.getConfig().set(path, false); //Turn friendly fire off
 		} else { //If friendly fire is off
-			plugin.getConfig().set(path, "true"); //Turn friendly fire on
+			plugin.getConfig().set(path, true); //Turn friendly fire on
 		}
 		plugin.saveConfig();
+	}
+	//Toggles player's team chat
+	public static void toggleChat(Player player, Teams plugin) {
+		String uuid = player.getUniqueId().toString();
+		if (getChat(player, plugin)) {
+			plugin.getConfig().set(uuid + ".chat", false);
+		} else {
+			plugin.getConfig().set(uuid + ".chat", true);
+		}
 	}
 	/* - - - - - -
 	 * Accessors
@@ -232,5 +241,10 @@ public class Team {
 		if (exists(name, plugin)) {
 			return new Team(name, plugin);
 		} else return null;
+	}
+	//Tests if player is in team chat
+	public static boolean getChat(Player player, Teams plugin) {
+		String uuid = player.getUniqueId().toString();
+		return plugin.getConfig().getBoolean(uuid + ".chat");
 	}
 }

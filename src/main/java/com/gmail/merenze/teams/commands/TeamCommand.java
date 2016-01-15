@@ -27,13 +27,13 @@ public class TeamCommand implements CommandExecutor {
 				} else if (arg.equalsIgnoreCase("join")) {
 					Join.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("hq")) {
-					
+					Hq.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("rally")) {
-					
+					Rally.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("chat")) {
-					
+					Chat.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("info")) {
-					
+					Info.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("promote")) {
 					
 				} else if (arg.equalsIgnoreCase("demote")) {

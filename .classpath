@@ -32,5 +32,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="G:/bukkit-1.7.10-R0.1-20140817.175650-8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
