@@ -11,6 +11,7 @@ package com.gmail.merenze.teams;
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -74,7 +75,7 @@ public class Team {
 		//Updates player data
 		path = "players." + uuid;
 		plugin.getConfig().set(path + "team", name);
-		plugin.getConfig().set(path + "chat", "false"); //Sets team chat to default false
+		plugin.getConfig().set(path + "chat", false); //Sets team chat to default false
 		plugin.saveConfig();
 	}
 	//Removes a member from the team
@@ -164,6 +165,14 @@ public class Team {
 			plugin.getConfig().set(uuid + ".chat", false);
 		} else {
 			plugin.getConfig().set(uuid + ".chat", true);
+		}
+	}
+	//Displays message to members of team
+	public void sendMessage(String msg) {
+		List<String> members = getMembers();
+		for (int i=0;i<members.size();i++) {
+			UUID uuid = UUID.fromString(members.get(i));
+			plugin.getServer().getPlayer(uuid).sendMessage(msg);
 		}
 	}
 	/* - - - - - -

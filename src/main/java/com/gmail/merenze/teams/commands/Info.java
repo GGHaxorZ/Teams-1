@@ -15,7 +15,7 @@ public class Info {
 			Player target = plugin.getServer().getPlayer(args[1]);
 			if (target!=null) { //If target player exists
 				if (Team.hasTeam(target, plugin)) { //If target player is on a team
-					
+					displayOtherInfo(player, target, plugin);
 				} else { //If target player is not on a team
 					player.sendMessage(ChatColor.GRAY + "That player is not on a team.");
 				}
@@ -24,21 +24,63 @@ public class Info {
 			}
 		} else { //If no arguments are provided
 			if (Team.hasTeam(player, plugin)) { //If player is on a team
-				
+				displayInfo(player, plugin);
 			} else {
 				player.sendMessage(ChatColor.RED + "You are not on a team!");
 			}
 		}
 	}
-	public static void displayOtherInfo(Player target, Teams plugin) {
+	//Displays info about other team to player
+	public static void displayOtherInfo(Player player, Player target, Teams plugin) {
 		Team team = Team.getTeam(target, plugin);
 		List<String> members = team.getMembers();
 		Player member;
-		
 		String info =
 				ChatColor.AQUA + "Displaying team info for " + target.getName() + ":\n" +
 				ChatColor.GRAY + "Name: " + ChatColor.WHITE + team.getName() + "\n" +
 				ChatColor.GRAY + "Members:\n";
+		for (int i=0;i<=members.size();i++) {
+			UUID uuid = UUID.fromString(members.get(i));
+			member = plugin.getServer().getPlayer(uuid);
+			if (team.isLeader(member)) {
+				info = info + ChatColor.AQUA + member.getName();
+			} else {
+				info = info + ChatColor.GRAY + member.getName();
+			}
+			if (i!=members.size()-1) {
+				info = info + ChatColor.GRAY + ", ";
+			}
+		}
+		player.sendMessage(info);
+	}
+	//Displays player's own team info
+	public static void displayInfo(Player target, Teams plugin) {
+		Team team = Team.getTeam(target, plugin);
+		List<String> members = team.getMembers();
+		Player member;
+		String info =
+				ChatColor.AQUA + "Displaying team info for " + target.getName() + ":\n" +
+				ChatColor.GRAY + "Name: " + ChatColor.WHITE + team.getName() + "\n";
+		if (team.getPass()!=null) {
+			info = info + ChatColor.GRAY + "Password: " + team.getPass() + "\n";
+		} else {
+			info = info + ChatColor.GRAY + "Password: Not set\n";
+		}
+		if (team.getHq()!=null) {
+			info = info + ChatColor.GRAY + "HQ: Set\n";
+		} else {
+			info = info + ChatColor.GRAY + "HQ: Not set\n";
+		}
+		if (team.getRally()!=null) {
+			info = info + ChatColor.GRAY + "Rally: Set\n";
+		} else {
+			info = info + ChatColor.GRAY + "Rally: Not set\n";
+		}
+		if (team.getFF()) {
+			info = info + ChatColor.GRAY + "Friendlyfire: On\n";
+		} else {
+			info = info + ChatColor.GRAY + "Friendlyfire: Off\n";
+		}
 		for (int i=0;i<=members.size();i++) {
 			UUID uuid = UUID.fromString(members.get(i));
 			member = plugin.getServer().getPlayer(uuid);
@@ -48,5 +90,6 @@ public class Info {
 				info = info + ChatColor.GRAY + member.getName() + ", ";
 			}
 		}
+		target.sendMessage(info);
 	}
 }

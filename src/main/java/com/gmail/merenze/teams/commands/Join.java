@@ -12,11 +12,13 @@ public class Join {
 			if (args.length>=2) { //If name is provided
 				Team team = Team.getTeam(args[1], plugin);
 				if (team.getPass() == null) { //If team does not have a pass
+					team.sendMessage(ChatColor.AQUA + player.getName() + " has joined the team.");
 					team.addMember(player); //Add the player to the team
 					player.sendMessage(ChatColor.AQUA + "Success! You have joined team " + team.getName());
 				} else { //If team does have a pass
 					if (args.length>=3) { //If pass is provided
 						if (args[2].equals(team.getPass())) { //If pass is correct
+							team.sendMessage(ChatColor.AQUA + player.getName() + " has joined the team.");
 							team.addMember(player); //Add the player to the team
 							player.sendMessage(ChatColor.AQUA + "Success! You have joined team " + team.getName());
 						} else { //If pass is incorrect
@@ -27,10 +29,10 @@ public class Join {
 					}
 				}
 			} else { //If name is not provided
-				player.sendMessage(ChatColor.RED + "You must provide a name!");
+				player.sendMessage(ChatColor.RED + "You must provide a name.");
 			}
 		} else { //If player is already on a team
-			player.sendMessage(ChatColor.RED + "You are already on a team!");
+			player.sendMessage(ChatColor.RED + "You are already on a team.");
 		}
 	}
 }
