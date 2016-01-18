@@ -91,6 +91,7 @@ public class Team {
 				}
 			}
 		}
+		plugin.getConfig().set("players." + uuid, null);
 		plugin.saveConfig();
 	}
 	//Promotes a member to leader
@@ -99,13 +100,13 @@ public class Team {
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
 		if (members.contains(uuid)) { //If player is a member (as opposed to a leader or not on the team)
 			List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
-			leaders.add(uuid); //Add player to leaders
 			for (int i=0;i<members.size();i++) { //Remove player from members
 				if (members.get(i).equals(uuid)) {
 					members.remove(i);
 					break;
 				}
 			}
+			leaders.add(uuid); //Add player to leaders
 			plugin.getConfig().set("teams." + name + ".leaders", leaders); //Update leaders
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
 			
@@ -118,13 +119,13 @@ public class Team {
 		List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
 		if (leaders.contains(uuid)) { //If player is a leader
 			List<String> members = plugin.getConfig().getStringList("teams." + name + ".leaders");
-			members.add(uuid); //Add player to members
 			for (int i=0;i<leaders.size();i++) { //Remove player from leaders
 				if (leaders.get(i).equals(uuid)) {
 					leaders.remove(i);
 					break;
 				}
 			}
+			members.add(uuid); //Add player to members
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
 			plugin.getConfig().set("teams." + name + ".leaders", leaders); //Update leaders
 		}
@@ -132,8 +133,8 @@ public class Team {
 	}
 	//Sets team hq
 	public void setHq(Location location) {
-		String path = "team." + name + ".hq";
-		plugin.getConfig().set(path + ".world", location.getWorld().toString());
+		String path = "teams." + name + ".hq";
+		plugin.getConfig().set(path + ".world", location.getWorld().getName());
 		plugin.getConfig().set(path + ".x", location.getX());
 		plugin.getConfig().set(path + ".y", location.getY());
 		plugin.getConfig().set(path + ".z", location.getZ());
@@ -141,8 +142,8 @@ public class Team {
 	}
 	//Sets team rally point
 	public void setRally(Location location) {
-		String path = "team." + name + ".rally";
-		plugin.getConfig().set(path + ".world", location.getWorld().toString());
+		String path = "teams." + name + ".rally";
+		plugin.getConfig().set(path + ".world", location.getWorld().getName());
 		plugin.getConfig().set(path + ".x", Double.toString(location.getX()));
 		plugin.getConfig().set(path + ".y", Double.toString(location.getY()));
 		plugin.getConfig().set(path + ".z", Double.toString(location.getZ()));
@@ -185,7 +186,7 @@ public class Team {
 	}
 	//Returns team pass
 	public String getPass() {
-		return plugin.getConfig().getString("team." + name + ".pass");
+		return plugin.getConfig().getString("teams." + name + ".pass");
 	}
 	//Returns a list of all members (including leaders)
 	public List<String> getMembers() {
@@ -199,22 +200,26 @@ public class Team {
 	//Returns team hq
 	public Location getHq() {
 		String path = "teams." + name + ".hq";
-		String worldName = plugin.getConfig().getString(path + ".world");
-		World world = plugin.getServer().getWorld(worldName);
-		double x = plugin.getConfig().getDouble(path + ".x");
-		double y = plugin.getConfig().getDouble(path + ".y");
-		double z = plugin.getConfig().getDouble(path + ".z");
-		return new Location(world, x, y, z);
+		if (plugin.getConfig().get(path)!=null) {
+			String worldName = plugin.getConfig().getString(path + ".world");
+			World world = plugin.getServer().getWorld(worldName);
+			double x = plugin.getConfig().getDouble(path + ".x");
+			double y = plugin.getConfig().getDouble(path + ".y");
+			double z = plugin.getConfig().getDouble(path + ".z");
+			return new Location(world, x, y, z);
+		} else return null;
 	}
 	//Returns team rally point
 	public Location getRally() {
 		String path = "teams." + name + ".rally";
-		String worldName = plugin.getConfig().getString(path + ".world");
-		World world = plugin.getServer().getWorld(worldName);
-		double x = plugin.getConfig().getDouble(path + ".x");
-		double y = plugin.getConfig().getDouble(path + ".y");
-		double z = plugin.getConfig().getDouble(path + ".z");
-		return new Location(world, x, y, z);
+		if (plugin.getConfig().get(path)!=null) {
+			String worldName = plugin.getConfig().getString(path + ".world");
+			World world = plugin.getServer().getWorld(worldName);
+			double x = plugin.getConfig().getDouble(path + ".x");
+			double y = plugin.getConfig().getDouble(path + ".y");
+			double z = plugin.getConfig().getDouble(path + ".z");
+			return new Location(world, x, y, z);
+		} else return null;
 	}
 	//Returns friendly fire setting
 	public boolean getFF() {
@@ -225,7 +230,17 @@ public class Team {
 		String uuid = player.getUniqueId().toString();
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
 		List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
-		return (members.contains(uuid) || leaders.contains(uuid));
+		
+		if (members!=null && leaders!=null) {
+			return (members.contains(uuid) || leaders.contains(uuid));
+		} else if (members==null && leaders!=null) {
+			return leaders.contains(uuid);
+		} else if (members!=null && leaders==null) {
+			return members.contains(uuid);
+		} else { //if both are null
+			return false;
+		}
+		//return (members.contains(uuid) || leaders.contains(uuid));
 	}
 	//Checks if a player is team leader
 	public boolean isLeader(Player player) {
@@ -237,6 +252,7 @@ public class Team {
 	public static boolean hasTeam(Player player, Teams plugin) {
 		return getTeam(player, plugin).getName() != null;
 	}
+	//Tests if team exists
 	public static boolean exists(String name, Teams plugin) {
 		List<String> names = plugin.getConfig().getStringList("names");
 		return names.contains(name);

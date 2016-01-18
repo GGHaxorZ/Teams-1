@@ -11,10 +11,12 @@ public class Rally {
 		if (Team.hasTeam(player, plugin)) { //If player is on a team
 			Team team = Team.getTeam(player, plugin);
 			if (team.getRally()!=null) { //If team has an rally
-				player.teleport(team.getHq()); //Teleport player to rally
+				player.teleport(team.getRally()); //Teleport player to rally
+			} else {
+				player.sendMessage(ChatColor.RED + "Your team's rally point has not been set.");
 			}
 		} else { //If player is not on a team
-			player.sendMessage(ChatColor.RED + "You are not on a team!");
+			player.sendMessage(ChatColor.RED + "You are not on a team.");
 		}
 	}
 }

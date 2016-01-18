@@ -12,9 +12,11 @@ public class Hq {
 			Team team = Team.getTeam(player, plugin);
 			if (team.getHq()!=null) { //If team has an hq
 				player.teleport(team.getHq()); //Teleport player to hq
+			} else {
+				player.sendMessage(ChatColor.RED + "Your team's headquarters has not been set.");
 			}
 		} else { //If player is not on a team
-			player.sendMessage(ChatColor.RED + "You are not on a team!");
+			player.sendMessage(ChatColor.RED + "You are not on a team.");
 		}
 	}
 }

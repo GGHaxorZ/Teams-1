@@ -34,6 +34,8 @@ public class TeamCommand implements CommandExecutor {
 					Chat.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("info")) {
 					Info.execute(player, plugin, args);
+				} else if (arg.equalsIgnoreCase("pass")) {
+					Pass.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("promote")) {
 					Promote.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("demote")) {
@@ -48,6 +50,8 @@ public class TeamCommand implements CommandExecutor {
 					FF.execute(player, plugin, args);
 				} else if (arg.equalsIgnoreCase("leave")) {
 					Leave.execute(player, plugin, args);
+				} else {
+					showUsage(player);
 				}
 			}
 		}
@@ -62,6 +66,7 @@ public class TeamCommand implements CommandExecutor {
 				"/team rally - Teleport to your team's rally\n" +
 				"/team chat - Enter your team's chat\n" +
 				"/team info [player] - Get info about a player's team\n" +
+				"/team pass <password> - Set your team's password\n" +
 				"/team promote <player> - Promote a player on your team\n" +
 				"/team demote <player> - Demote a player on your team\n" +
 				"/team kick <player> - Kick a player from your team\n" +

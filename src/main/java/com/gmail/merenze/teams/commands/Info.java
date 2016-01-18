@@ -81,7 +81,8 @@ public class Info {
 		} else {
 			info = info + ChatColor.GRAY + "Friendlyfire: Off\n";
 		}
-		for (int i=0;i<=members.size();i++) {
+		info = info + ChatColor.GRAY + "Members:\n";
+		for (int i=0;i<members.size();i++) {
 			UUID uuid = UUID.fromString(members.get(i));
 			member = plugin.getServer().getPlayer(uuid);
 			if (team.isLeader(member)) {
