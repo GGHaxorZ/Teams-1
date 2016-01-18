@@ -13,30 +13,16 @@ public class FF {
 	public static void execute(Player player, Teams plugin, String[] args) {
 		if (Team.hasTeam(player, plugin)) {
 			Team team = Team.getTeam(player, plugin);
-			if (team.isLeader(player)) {
+			if (team.isManager(player)) {
 				team.toggleFF();
-				displayFF(player, team, plugin);
+				if (team.getFF()) team.sendMessage(ChatColor.DARK_AQUA + "Friendlyfire is now on.");
+				else team.sendMessage(ChatColor.DARK_AQUA + "Friendlyfire is now off.");
 			}
 			else {
-				player.sendMessage(ChatColor.RED + "You must be a team leader to do that.");
+				player.sendMessage(ChatColor.RED + "You must be a manager to do that.");
 			}
 		} else {
 			player.sendMessage("You are not on a team.");
-		}
-	}
-	//Displays FF message to teammates
-	public static void displayFF(Player player, Team team, Teams plugin) {
-		List<String> members = team.getMembers();
-		if (team.getFF()) {
-			for (int i=0;i<members.size();i++) {
-				UUID uuid = UUID.fromString(members.get(i));
-				plugin.getServer().getPlayer(uuid).sendMessage(ChatColor.AQUA + "Friendlyfire is now on.");
-			}
-		} else {
-			for (int i=0;i<members.size();i++) {
-				UUID uuid = UUID.fromString(members.get(i));
-				plugin.getServer().getPlayer(uuid).sendMessage(ChatColor.AQUA + "Friendlyfire is now off.");
-			}
 		}
 	}
 }

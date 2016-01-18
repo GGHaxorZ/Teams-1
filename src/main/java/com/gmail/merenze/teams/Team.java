@@ -30,10 +30,11 @@ public class Team {
 		this.name = name;
 		String uuid = creator.getUniqueId().toString();
 		//Update team data
-		List<String> leaders = new ArrayList();
-		leaders.add(uuid);
-		this.plugin.getConfig().set("teams." + name + ".leaders", leaders); //Adds creator to team leaders
-		this.plugin.getConfig().set("teams." + name + ".ff", "false"); //Sets friendlyfire to default false		
+		List<String> managers = new ArrayList();
+		managers.add(uuid);
+		this.addMember(creator);
+		this.promote(creator);
+		this.plugin.getConfig().set("teams." + name + ".ff", false); //Sets friendlyfire to default false		
 		//Update player data
 		this.plugin.getConfig().set("players." + uuid + ".team", this.name);
 		this.plugin.getConfig().set("players." + uuid + ".chat", false);
@@ -69,13 +70,13 @@ public class Team {
 		String path;
 		//Updates team data
 		path = "teams." + name + ".members";
-		List<String> members = plugin.getConfig().getStringList(path);
+		List<String> members = new ArrayList();
 		members.add(uuid);
 		plugin.getConfig().set("teams." + name + ".members", members);
 		//Updates player data
 		path = "players." + uuid;
-		plugin.getConfig().set(path + "team", name);
-		plugin.getConfig().set(path + "chat", false); //Sets team chat to default false
+		plugin.getConfig().set(path + ".team", name);
+		plugin.getConfig().set(path + ".chat", false); //Sets team chat to default false
 		plugin.saveConfig();
 	}
 	//Removes a member from the team
@@ -83,51 +84,53 @@ public class Team {
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
 		String uuid = target.getUniqueId().toString();
 		this.demote(target);
-		if (members.contains(uuid)) {
-			for (int i=0;i<members.size();i++) {
-				if (members.get(i).equals(uuid)) {
-					members.remove(i);
-					break;
-				}
+		for (int i=0;i<members.size();i++) {
+			if (members.get(i).equals(uuid)) {
+				members.remove(i);
+				break;
 			}
 		}
 		plugin.getConfig().set("players." + uuid, null);
 		plugin.saveConfig();
 	}
-	//Promotes a member to leader
+	//Promotes a member to manager
 	public void promote(Player target) {
 		String uuid = target.getUniqueId().toString();
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
-		if (members.contains(uuid)) { //If player is a member (as opposed to a leader or not on the team)
-			List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
-			for (int i=0;i<members.size();i++) { //Remove player from members
-				if (members.get(i).equals(uuid)) {
-					members.remove(i);
-					break;
+		if (members.contains(uuid)) { //If player is a member (as opposed to a manager or not on the team)
+			List<String> managers = plugin.getConfig().getStringList("teams." + name + ".managers");
+			if (members.contains(uuid)) {
+				for (int i=0;i<members.size();i++) { //Remove player from members
+					if (members.get(i).equals(uuid)) {
+						members.remove(i);
+						break;
+					}
 				}
 			}
-			leaders.add(uuid); //Add player to leaders
-			plugin.getConfig().set("teams." + name + ".leaders", leaders); //Update leaders
+			managers.add(uuid); //Add player to managers
+			plugin.getConfig().set("teams." + name + ".managers", managers); //Update managers
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
 			
 		}
 		plugin.saveConfig();
 	}
-	//Demotes a leader
+	//Demotes a manager
 	public void demote(Player target) {
 		String uuid = target.getUniqueId().toString();
-		List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
-		if (leaders.contains(uuid)) { //If player is a leader
-			List<String> members = plugin.getConfig().getStringList("teams." + name + ".leaders");
-			for (int i=0;i<leaders.size();i++) { //Remove player from leaders
-				if (leaders.get(i).equals(uuid)) {
-					leaders.remove(i);
+		List<String> managers = plugin.getConfig().getStringList("teams." + name + ".managers");
+		if (managers.contains(uuid)) { //If player is a manager
+			List<String> members = plugin.getConfig().getStringList("teams." + name + ".managers");
+			for (int i=0;i<managers.size();i++) { //Remove player from managers
+				if (managers.get(i).equals(uuid)) {
+					managers.remove(i);
 					break;
 				}
 			}
-			members.add(uuid); //Add player to members
+			if (!members.contains(uuid)) {
+				members.add(uuid); //Add player to members
+			}
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
-			plugin.getConfig().set("teams." + name + ".leaders", leaders); //Update leaders
+			plugin.getConfig().set("teams." + name + ".managers", managers); //Update managers
 		}
 		plugin.saveConfig();
 	}
@@ -188,13 +191,13 @@ public class Team {
 	public String getPass() {
 		return plugin.getConfig().getString("teams." + name + ".pass");
 	}
-	//Returns a list of all members (including leaders)
+	//Returns a list of all members (including managers)
 	public List<String> getMembers() {
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
-		List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
+		List<String> managers = plugin.getConfig().getStringList("teams." + name + ".managers");
 		List<String> players = new ArrayList();
 		players.addAll(members);
-		players.addAll(leaders);
+		players.addAll(managers);
 		return players;
 	}
 	//Returns team hq
@@ -229,24 +232,24 @@ public class Team {
 	public boolean hasMember(Player player) {
 		String uuid = player.getUniqueId().toString();
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
-		List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
+		List<String> managers = plugin.getConfig().getStringList("teams." + name + ".managers");
 		
-		if (members!=null && leaders!=null) {
-			return (members.contains(uuid) || leaders.contains(uuid));
-		} else if (members==null && leaders!=null) {
-			return leaders.contains(uuid);
-		} else if (members!=null && leaders==null) {
+		if (members!=null && managers!=null) {
+			return (members.contains(uuid) || managers.contains(uuid));
+		} else if (members==null && managers!=null) {
+			return managers.contains(uuid);
+		} else if (members!=null && managers==null) {
 			return members.contains(uuid);
 		} else { //if both are null
 			return false;
 		}
-		//return (members.contains(uuid) || leaders.contains(uuid));
+		//return (members.contains(uuid) || managers.contains(uuid));
 	}
-	//Checks if a player is team leader
-	public boolean isLeader(Player player) {
+	//Checks if a player is team manager
+	public boolean isManager(Player player) {
 		String uuid = player.getUniqueId().toString();
-		List<String> leaders = plugin.getConfig().getStringList("teams." + name + ".leaders");
-		return leaders.contains(uuid);
+		List<String> managers = plugin.getConfig().getStringList("teams." + name + ".managers");
+		return managers.contains(uuid);
 	}
 	//Tests if a player is on any team
 	public static boolean hasTeam(Player player, Teams plugin) {

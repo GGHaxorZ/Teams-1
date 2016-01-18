@@ -10,15 +10,15 @@ public class Pass {
 	public static void execute(Player player, Teams plugin, String[] args) {
 		if (Team.hasTeam(player, plugin)) {
 			Team team = Team.getTeam(player, plugin);
-			if (team.isLeader(player)) {
+			if (team.isManager(player)) {
 				if (args.length>=2) {
 					team.setPass(args[1]);
-					team.sendMessage(ChatColor.AQUA + "Password set to '" + team.getPass() + "'.");
+					team.sendMessage(ChatColor.DARK_AQUA + "Password set to '" + team.getPass() + "'.");
 				} else {
 					player.sendMessage(ChatColor.RED + "You must specifiy a password.");
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You must be a team leader to do that.");
+				player.sendMessage(ChatColor.RED + "You must be a manager to do that.");
 			}
 		} else {
 			player.sendMessage(ChatColor.RED + "You are not on a team.");

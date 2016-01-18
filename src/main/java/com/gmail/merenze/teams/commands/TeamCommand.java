@@ -1,5 +1,6 @@
 package com.gmail.merenze.teams.commands;
 //https://bukkit.org/threads/multiple-args-basing-off-a-main-executor-in-different-classes.166300/
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -58,7 +59,7 @@ public class TeamCommand implements CommandExecutor {
 		return true;
 	}
 	public void showUsage(CommandSender sender) {
-		String usage =
+		String usage = ChatColor.DARK_AQUA + "***Anyone***\n" + ChatColor.GRAY +
 				"/team - Display team interface\n" +
 				"/team create <name> [pass] - Create a team\n" +
 				"/team join <name> [pass] - Join an existing team\n" +
@@ -66,6 +67,7 @@ public class TeamCommand implements CommandExecutor {
 				"/team rally - Teleport to your team's rally\n" +
 				"/team chat - Enter your team's chat\n" +
 				"/team info [player] - Get info about a player's team\n" +
+				ChatColor.DARK_AQUA + "***Managers only***\n" + ChatColor.GRAY + 
 				"/team pass <password> - Set your team's password\n" +
 				"/team promote <player> - Promote a player on your team\n" +
 				"/team demote <player> - Demote a player on your team\n" +

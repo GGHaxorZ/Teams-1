@@ -10,12 +10,12 @@ public class SetHq {
 	public static void execute(Player player, Teams plugin, String[] args) {
 		if (Team.hasTeam(player, plugin)) {
 			Team team = Team.getTeam(player, plugin);
-			if (team.isLeader(player)) {
+			if (team.isManager(player)) {
 				team.setHq(player.getLocation());
-				player.sendMessage(ChatColor.AQUA + "Headquarters has been set to your location.");
+				player.sendMessage(ChatColor.DARK_AQUA + "Headquarters has been set to your location.");
 			}
 			else {
-				player.sendMessage(ChatColor.RED + "You must be a team leader to do that.");
+				player.sendMessage(ChatColor.RED + "You must be a manager to do that.");
 			}
 		} else {
 			player.sendMessage(ChatColor.RED + "You are not on a team.");

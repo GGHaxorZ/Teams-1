@@ -10,10 +10,14 @@ public class SetRally {
 	public static void execute(Player player, Teams plugin, String[] args) {
 		if (Team.hasTeam(player, plugin)) {
 			Team team = Team.getTeam(player, plugin);
-			if (team.isLeader(player)) {
+			if (team.isManager(player)) {
 				team.setRally(player.getLocation());
-				player.sendMessage(ChatColor.AQUA + "Rally point has been set to your location.");
+				player.sendMessage(ChatColor.DARK_AQUA + "Rally point has been set to your location.");
+			} else {
+				player.sendMessage(ChatColor.RED + "You must be a manager to do that.");
 			}
+		} else {
+			player.sendMessage(ChatColor.RED + "You are not on a team.");
 		}
 	}
 }

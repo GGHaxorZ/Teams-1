@@ -10,11 +10,15 @@ public class Create {
 	public static void execute(Player player, Teams plugin, String[] args) {
 		if (!Team.hasTeam(player, plugin)) {
 			if (args.length>=2) { //If name is provided
-				Team team = new Team(player, args[1], plugin); //Add the team to the config
-				if (args.length>=3) { //If pass is provided
-					team.setPass(args[2]); //Set the password
+				if (!Team.exists(args[1], plugin))  {
+					Team team = new Team(player, args[1], plugin); //Add the team to the config
+					if (args.length>=3) { //If pass is provided
+						team.setPass(args[2]); //Set the password
+					}
+					player.sendMessage(ChatColor.DARK_AQUA + "Success! You have created team " + team.getName());
+				} else {
+					player.sendMessage(ChatColor.RED + "There is already a team by that name.");
 				}
-				player.sendMessage(ChatColor.AQUA + "Success! You have created team " + team.getName());
 			} else {
 				player.sendMessage(ChatColor.RED + "You must provide a name!");
 			}

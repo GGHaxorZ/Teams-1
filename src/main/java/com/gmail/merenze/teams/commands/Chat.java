@@ -11,9 +11,9 @@ public class Chat {
 		if (Team.hasTeam(player, plugin)) { //If player is on a team
 			Team.toggleChat(player, plugin); //Toggle player chat
 			if (Team.getChat(player, plugin)) { //If player is now in team chat
-				player.sendMessage(ChatColor.AQUA + "You are now in team chat.");
+				player.sendMessage(ChatColor.DARK_AQUA + "You are now in team chat.");
 			} else { //If player is now out of team chat
-				player.sendMessage(ChatColor.AQUA + "You are no longer in team chat.");
+				player.sendMessage(ChatColor.DARK_AQUA + "You are no longer in team chat.");
 			}
 		}
 	}

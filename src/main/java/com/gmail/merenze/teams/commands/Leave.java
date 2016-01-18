@@ -11,8 +11,8 @@ public class Leave {
 		if (Team.hasTeam(player, plugin)) {
 			Team team = Team.getTeam(player, plugin);
 			team.removeMember(player);
-			team.sendMessage(ChatColor.AQUA + player.getName() + " has left the team.");
-			player.sendMessage(ChatColor.AQUA + "You have left the team.");
+			team.sendMessage(ChatColor.DARK_AQUA + player.getName() + " has left the team.");
+			player.sendMessage(ChatColor.DARK_AQUA + "You have left the team.");
 		}
 	}
 }

@@ -13,12 +13,12 @@ public class Promote {
 	public static void execute(Player player, Teams plugin, String[] args) {
 		if (Team.hasTeam(player, plugin)) {
 			Team team = Team.getTeam(player, plugin);
-			if (team.isLeader(player)) {
+			if (team.isManager(player)) {
 				if (args.length>=2) {
 					Player target = plugin.getServer().getPlayer(args[1]);
 					if (team.hasMember(target)) {
 						team.promote(target);
-						team.sendMessage(ChatColor.AQUA + target.getName() + " has been promoted.");
+						team.sendMessage(ChatColor.DARK_AQUA + target.getName() + " has been promoted.");
 					} else {
 						player.sendMessage(ChatColor.RED + "That player is not on your team.");
 					}
@@ -26,7 +26,7 @@ public class Promote {
 					player.sendMessage(ChatColor.RED + "You must specify a teammate.");
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You must be a team leader to do that.");
+				player.sendMessage(ChatColor.RED + "You must be a manager to do that.");
 			}
 		} else {
 			player.sendMessage(ChatColor.RED + "You are not on a team.");

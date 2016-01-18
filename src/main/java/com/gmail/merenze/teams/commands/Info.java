@@ -36,14 +36,14 @@ public class Info {
 		List<String> members = team.getMembers();
 		Player member;
 		String info =
-				ChatColor.AQUA + "Displaying team info for " + target.getName() + ":\n" +
+				ChatColor.DARK_AQUA + "Displaying team info for " + target.getName() + ":\n" +
 				ChatColor.GRAY + "Name: " + ChatColor.WHITE + team.getName() + "\n" +
 				ChatColor.GRAY + "Members:\n";
 		for (int i=0;i<=members.size();i++) {
 			UUID uuid = UUID.fromString(members.get(i));
 			member = plugin.getServer().getPlayer(uuid);
-			if (team.isLeader(member)) {
-				info = info + ChatColor.AQUA + member.getName();
+			if (team.isManager(member)) {
+				info = info + ChatColor.DARK_AQUA + member.getName();
 			} else {
 				info = info + ChatColor.GRAY + member.getName();
 			}
@@ -59,7 +59,7 @@ public class Info {
 		List<String> members = team.getMembers();
 		Player member;
 		String info =
-				ChatColor.AQUA + "Displaying team info for " + target.getName() + ":\n" +
+				ChatColor.DARK_AQUA + "Displaying team info for " + target.getName() + ":\n" +
 				ChatColor.GRAY + "Name: " + ChatColor.WHITE + team.getName() + "\n";
 		if (team.getPass()!=null) {
 			info = info + ChatColor.GRAY + "Password: " + team.getPass() + "\n";
@@ -85,10 +85,10 @@ public class Info {
 		for (int i=0;i<members.size();i++) {
 			UUID uuid = UUID.fromString(members.get(i));
 			member = plugin.getServer().getPlayer(uuid);
-			if (team.isLeader(member)) {
-				info = info + ChatColor.AQUA + member.getName() + ChatColor.GRAY + ", ";
+			if (team.isManager(member)) {
+				info = info + ChatColor.DARK_AQUA + member.getName() + ChatColor.GRAY + " - Health: " + member.getHealth()*5 + "%\n";
 			} else {
-				info = info + ChatColor.GRAY + member.getName() + ", ";
+				info = info + ChatColor.GRAY + member.getName() + ChatColor.GRAY + " - Health: " + member.getHealth()*5 + "%\n";
 			}
 		}
 		target.sendMessage(info);
