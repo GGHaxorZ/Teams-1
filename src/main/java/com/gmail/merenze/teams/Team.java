@@ -1,14 +1,4 @@
 package com.gmail.merenze.teams;
-/* I M P O R T A N T *
- * * * * * * * * * * *
- * There is no reason to instantiate a team object, except when a player creates a
- * team. In all other circumstances, team methods should be accessed with the static
- * method getTeam(), which will return an object whose methods can be accessed.
- * Example:
- * Team.getTeam((Player) sender, plugin).addMember((Player) sender);
- * Adds the command executor to the team.
- * * * * * * * * * * *
- */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +20,7 @@ public class Team {
 		this.name = name;
 		String uuid = creator.getUniqueId().toString();
 		//Update team data
-		List<String> managers = new ArrayList();
+		List<String> managers = new ArrayList<String>();
 		managers.add(uuid);
 		this.addMember(creator);
 		this.promote(creator);
@@ -44,14 +34,14 @@ public class Team {
 		names.add(name);
 		this.plugin.getConfig().set("names", names);
 	}
-	//Used in the static method Team.getTeam(Player, Teams). Should not be used under any other circumstances.
-	public Team(Player player, Teams plugin) {
+	//Used in the static method Team.getTeam(Player, Teams).
+	private Team(Player player, Teams plugin) {
 		String path = "players." + player.getUniqueId().toString() + ".team";
 		this.plugin = plugin;
 		this.name = plugin.getConfig().getString(path);
 	}
-	//Used in the static method Team.getTeam(String, Teams). Should not be used under any other circumstances.
-	public Team(String name, Teams plugin) {
+	//Used in the static method Team.getTeam(String, Teams).
+	private Team(String name, Teams plugin) {
 		this.name=name;
 		this.plugin=plugin;
 	}
@@ -70,9 +60,10 @@ public class Team {
 		String path;
 		//Updates team data
 		path = "teams." + name + ".members";
-		List<String> members = new ArrayList();
+		List<String> members = new ArrayList<String>();
 		members.add(uuid);
-		plugin.getConfig().set("teams." + name + ".members", members);
+		//plugin.getConfig().set("teams." + name + ".members", null); //Delete old list
+		plugin.getConfig().set("teams." + name + ".members", members); //Set new list
 		//Updates player data
 		path = "players." + uuid;
 		plugin.getConfig().set(path + ".team", name);
@@ -84,12 +75,15 @@ public class Team {
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
 		String uuid = target.getUniqueId().toString();
 		this.demote(target);
+		//Updates team data
 		for (int i=0;i<members.size();i++) {
 			if (members.get(i).equals(uuid)) {
 				members.remove(i);
 				break;
 			}
 		}
+		plugin.getConfig().set("teams." + name + ".members", null); //Delete old list
+		plugin.getConfig().set("teams." + name + ".members", members); //Save new list
 		plugin.getConfig().set("players." + uuid, null);
 		plugin.saveConfig();
 	}
@@ -108,7 +102,9 @@ public class Team {
 				}
 			}
 			managers.add(uuid); //Add player to managers
+			plugin.getConfig().set("teams." + name + ".managers", null);
 			plugin.getConfig().set("teams." + name + ".managers", managers); //Update managers
+			plugin.getConfig().set("teams." + name + ".members", null);
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
 			
 		}
@@ -129,7 +125,9 @@ public class Team {
 			if (!members.contains(uuid)) {
 				members.add(uuid); //Add player to members
 			}
+			plugin.getConfig().set("teams." + name + ".members", null);
 			plugin.getConfig().set("teams." + name + ".members", members); //Update members
+			plugin.getConfig().set("teams." + name + ".managers", null);
 			plugin.getConfig().set("teams." + name + ".managers", managers); //Update managers
 		}
 		plugin.saveConfig();
@@ -195,7 +193,7 @@ public class Team {
 	public List<String> getMembers() {
 		List<String> members = plugin.getConfig().getStringList("teams." + name + ".members");
 		List<String> managers = plugin.getConfig().getStringList("teams." + name + ".managers");
-		List<String> players = new ArrayList();
+		List<String> players = new ArrayList<String>();
 		players.addAll(members);
 		players.addAll(managers);
 		return players;
