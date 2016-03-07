@@ -1,5 +1,4 @@
 package com.gmail.merenze.teams.commands;
-//https://bukkit.org/threads/multiple-args-basing-off-a-main-executor-in-different-classes.166300/
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -67,6 +66,7 @@ public class TeamCommand implements CommandExecutor {
 				"/team rally - Teleport to your team's rally\n" +
 				"/team chat - Enter your team's chat\n" +
 				"/team info [player] - Get info about a player's team\n" +
+				"/team leave - Leave your team" +
 				ChatColor.DARK_AQUA + "***Managers only***\n" + ChatColor.GRAY + 
 				"/team pass <password> - Set your team's password\n" +
 				"/team promote <player> - Promote a player on your team\n" +
@@ -74,8 +74,7 @@ public class TeamCommand implements CommandExecutor {
 				"/team kick <player> - Kick a player from your team\n" +
 				"/team sethq - Set your team's headquarters to your location\n" +
 				"/team setrally - Set your team's rally point to your location\n" +
-				"/team ff - Toggle your team's friendlyfire setting\n" +
-				"/team leave - Leave your team";
+				"/team ff - Toggle your team's friendlyfire setting\n";
 		sender.sendMessage(usage);
 	}
 }

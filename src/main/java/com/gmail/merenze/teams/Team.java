@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
+//Members and Mangers arrays do NOT contain overlapping values
 public class Team {
 	private Teams plugin;
 	private String name;
@@ -164,9 +164,9 @@ public class Team {
 	public static void toggleChat(Player player, Teams plugin) {
 		String uuid = player.getUniqueId().toString();
 		if (getChat(player, plugin)) {
-			plugin.getConfig().set(uuid + ".chat", false);
+			plugin.getConfig().set("players." + uuid + ".chat", false);
 		} else {
-			plugin.getConfig().set(uuid + ".chat", true);
+			plugin.getConfig().set("players." + uuid + ".chat", true);
 		}
 	}
 	//Displays message to members of team
