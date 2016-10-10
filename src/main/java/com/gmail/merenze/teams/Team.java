@@ -1,4 +1,4 @@
-package com.gmail.merenze.teams;
+ package com.gmail.merenze.teams;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,8 +20,8 @@ public class Team {
 		this.name = name;
 		String uuid = creator.getUniqueId().toString();
 		//Update team data
-		List<String> managers = new ArrayList<String>();
-		managers.add(uuid);
+		//List<String> managers = new ArrayList<String>();
+		//managers.add(uuid);
 		this.addMember(creator);
 		this.promote(creator);
 		this.plugin.getConfig().set("teams." + name + ".ff", false); //Sets friendlyfire to default false		
